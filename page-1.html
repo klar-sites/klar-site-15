@@ -1,0 +1,1456 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Klarify is a clean, API-first SaaS platform for automating workflows, securing operations, and helping teams ship faster.">
+  <title>Klarify — Make the job simpler</title>
+  <style>
+    :root {
+      --klarify-lp-x9a2-color-ink: #0a2540;
+      --klarify-lp-x9a2-color-muted: #425466;
+      --klarify-lp-x9a2-color-soft: #6b7c93;
+      --klarify-lp-x9a2-color-line: rgba(10, 37, 64, 0.1);
+      --klarify-lp-x9a2-color-page: #f6f9fc;
+      --klarify-lp-x9a2-color-panel: rgba(255, 255, 255, 0.82);
+      --klarify-lp-x9a2-color-white: #ffffff;
+      --klarify-lp-x9a2-color-blue: #635bff;
+      --klarify-lp-x9a2-color-purple: #7a5cff;
+      --klarify-lp-x9a2-color-teal: #00d4ff;
+      --klarify-lp-x9a2-color-green: #00b894;
+      --klarify-lp-x9a2-color-orange: #ffb86b;
+      --klarify-lp-x9a2-shadow-sm: 0 8px 24px rgba(10, 37, 64, 0.08);
+      --klarify-lp-x9a2-shadow-md: 0 18px 48px rgba(10, 37, 64, 0.12);
+      --klarify-lp-x9a2-shadow-lg: 0 30px 80px rgba(10, 37, 64, 0.18);
+      --klarify-lp-x9a2-radius-sm: 12px;
+      --klarify-lp-x9a2-radius-md: 18px;
+      --klarify-lp-x9a2-radius-lg: 28px;
+      --klarify-lp-x9a2-max-width: 1184px;
+      --klarify-lp-x9a2-transition: 260ms cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--klarify-lp-x9a2-color-ink);
+      background:
+        radial-gradient(circle at 8% 12%, rgba(0, 212, 255, 0.18), transparent 26rem),
+        radial-gradient(circle at 84% 6%, rgba(99, 91, 255, 0.16), transparent 30rem),
+        linear-gradient(180deg, #ffffff 0%, var(--klarify-lp-x9a2-color-page) 42%, #ffffff 100%);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button,
+    input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    img,
+    svg {
+      display: block;
+    }
+
+    ::selection {
+      color: #ffffff;
+      background: var(--klarify-lp-x9a2-color-blue);
+    }
+
+    .klarify-lp-x9a2-page-shell {
+      position: relative;
+      min-height: 100vh;
+      isolation: isolate;
+    }
+
+    .klarify-lp-x9a2-page-shell::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 720px;
+      background:
+        linear-gradient(115deg, rgba(99, 91, 255, 0.11), transparent 44%),
+        linear-gradient(150deg, rgba(0, 212, 255, 0.15), transparent 52%),
+        linear-gradient(92deg, transparent 0%, rgba(122, 92, 255, 0.08) 100%);
+      clip-path: polygon(0 0, 100% 0, 100% 72%, 0 100%);
+      z-index: -2;
+    }
+
+    .klarify-lp-x9a2-page-shell::after {
+      content: "";
+      position: absolute;
+      top: 120px;
+      right: -160px;
+      width: 520px;
+      height: 520px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(99, 91, 255, 0.24), rgba(0, 212, 255, 0.12));
+      filter: blur(20px);
+      z-index: -1;
+    }
+
+    .klarify-lp-x9a2-skip-link {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      color: #ffffff;
+      background: var(--klarify-lp-x9a2-color-ink);
+      transform: translateY(-140%);
+      transition: transform var(--klarify-lp-x9a2-transition);
+      z-index: 100;
+    }
+
+    .klarify-lp-x9a2-skip-link:focus {
+      transform: translateY(0);
+    }
+
+    .klarify-lp-x9a2-width-rail {
+      width: min(100% - 40px, var(--klarify-lp-x9a2-max-width));
+      margin-inline: auto;
+    }
+
+    .klarify-lp-x9a2-nav-frame {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: rgba(255, 255, 255, 0.72);
+      border-bottom: 1px solid rgba(10, 37, 64, 0.06);
+    }
+
+    .klarify-lp-x9a2-nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      min-height: 72px;
+    }
+
+    .klarify-lp-x9a2-brand-mark {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      font-size: 1.35rem;
+      color: var(--klarify-lp-x9a2-color-ink);
+    }
+
+    .klarify-lp-x9a2-brand-spark {
+      width: 28px;
+      height: 28px;
+      border-radius: 9px;
+      background:
+        radial-gradient(circle at 35% 28%, #ffffff 0 12%, transparent 13%),
+        linear-gradient(135deg, var(--klarify-lp-x9a2-color-blue), var(--klarify-lp-x9a2-color-teal));
+      box-shadow: 0 10px 24px rgba(99, 91, 255, 0.28);
+    }
+
+    .klarify-lp-x9a2-nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      color: var(--klarify-lp-x9a2-color-muted);
+      font-size: 0.95rem;
+      font-weight: 650;
+    }
+
+    .klarify-lp-x9a2-nav-anchor {
+      position: relative;
+      padding: 8px 0;
+      transition: color var(--klarify-lp-x9a2-transition);
+    }
+
+    .klarify-lp-x9a2-nav-anchor::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 1px;
+      height: 2px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--klarify-lp-x9a2-color-blue), var(--klarify-lp-x9a2-color-teal));
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform var(--klarify-lp-x9a2-transition);
+    }
+
+    .klarify-lp-x9a2-nav-anchor:hover,
+    .klarify-lp-x9a2-nav-anchor:focus-visible {
+      color: var(--klarify-lp-x9a2-color-ink);
+    }
+
+    .klarify-lp-x9a2-nav-anchor:hover::after,
+    .klarify-lp-x9a2-nav-anchor:focus-visible::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+
+    .klarify-lp-x9a2-pill-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 44px;
+      padding: 0 18px;
+      border: 0;
+      border-radius: 999px;
+      color: #ffffff;
+      background: var(--klarify-lp-x9a2-color-ink);
+      box-shadow: 0 12px 28px rgba(10, 37, 64, 0.16);
+      font-weight: 750;
+      letter-spacing: -0.01em;
+      transition:
+        transform var(--klarify-lp-x9a2-transition),
+        box-shadow var(--klarify-lp-x9a2-transition),
+        background var(--klarify-lp-x9a2-transition);
+    }
+
+    .klarify-lp-x9a2-pill-action:hover,
+    .klarify-lp-x9a2-pill-action:focus-visible {
+      transform: translateY(-2px);
+      background: #122f4d;
+      box-shadow: 0 18px 36px rgba(10, 37, 64, 0.22);
+    }
+
+    .klarify-lp-x9a2-pill-action svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    .klarify-lp-x9a2-ghost-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      min-height: 44px;
+      padding: 0 18px;
+      border: 1px solid rgba(10, 37, 64, 0.12);
+      border-radius: 999px;
+      color: var(--klarify-lp-x9a2-color-ink);
+      background: rgba(255, 255, 255, 0.72);
+      box-shadow: 0 8px 22px rgba(10, 37, 64, 0.06);
+      font-weight: 750;
+      transition:
+        transform var(--klarify-lp-x9a2-transition),
+        box-shadow var(--klarify-lp-x9a2-transition),
+        border-color var(--klarify-lp-x9a2-transition);
+    }
+
+    .klarify-lp-x9a2-ghost-action:hover,
+    .klarify-lp-x9a2-ghost-action:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(99, 91, 255, 0.28);
+      box-shadow: 0 16px 34px rgba(10, 37, 64, 0.1);
+    }
+
+    .klarify-lp-x9a2-mobile-trigger {
+      display: none;
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(10, 37, 64, 0.1);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.78);
+      color: var(--klarify-lp-x9a2-color-ink);
+    }
+
+    .klarify-lp-x9a2-mobile-trigger svg {
+      width: 22px;
+      height: 22px;
+      margin: auto;
+    }
+
+    .klarify-lp-x9a2-hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(360px, 0.9fr);
+      align-items: center;
+      gap: 56px;
+      padding: 104px 0 88px;
+    }
+
+    .klarify-lp-x9a2-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 7px 12px;
+      border: 1px solid rgba(99, 91, 255, 0.14);
+      border-radius: 999px;
+      color: #314b6b;
+      background: rgba(255, 255, 255, 0.64);
+      box-shadow: 0 8px 22px rgba(99, 91, 255, 0.08);
+      font-size: 0.87rem;
+      font-weight: 750;
+    }
+
+    .klarify-lp-x9a2-eyebrow-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--klarify-lp-x9a2-color-green);
+      box-shadow: 0 0 0 5px rgba(0, 184, 148, 0.12);
+    }
+
+    .klarify-lp-x9a2-hero-heading {
+      max-width: 760px;
+      margin: 24px 0 20px;
+      font-size: clamp(3.2rem, 7vw, 6.85rem);
+      line-height: 0.93;
+      letter-spacing: -0.075em;
+      font-weight: 850;
+    }
+
+    .klarify-lp-x9a2-gradient-text {
+      color: transparent;
+      background: linear-gradient(105deg, #0a2540 10%, var(--klarify-lp-x9a2-color-blue) 48%, #00a7c7 90%);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .klarify-lp-x9a2-hero-copy {
+      max-width: 640px;
+      margin: 0;
+      color: var(--klarify-lp-x9a2-color-muted);
+      font-size: clamp(1.08rem, 2vw, 1.28rem);
+      line-height: 1.65;
+    }
+
+    .klarify-lp-x9a2-hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 32px;
+    }
+
+    .klarify-lp-x9a2-proof-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin-top: 38px;
+      color: var(--klarify-lp-x9a2-color-soft);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .klarify-lp-x9a2-proof-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .klarify-lp-x9a2-proof-item svg {
+      width: 18px;
+      height: 18px;
+      color: var(--klarify-lp-x9a2-color-green);
+    }
+
+    .klarify-lp-x9a2-ui-stage {
+      position: relative;
+      perspective: 1200px;
+    }
+
+    .klarify-lp-x9a2-ui-glow {
+      position: absolute;
+      inset: 12% -8% -8% 14%;
+      border-radius: 42px;
+      background: linear-gradient(135deg, rgba(99, 91, 255, 0.28), rgba(0, 212, 255, 0.22));
+      filter: blur(42px);
+      transform: rotate(-8deg);
+      z-index: -1;
+    }
+
+    .klarify-lp-x9a2-product-panel {
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.76);
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.72);
+      box-shadow: var(--klarify-lp-x9a2-shadow-lg);
+      transform:
+        rotateX(var(--klarify-lp-x9a2-tilt-x, 0deg))
+        rotateY(var(--klarify-lp-x9a2-tilt-y, 0deg));
+      transition: transform 180ms ease, box-shadow var(--klarify-lp-x9a2-transition);
+      backdrop-filter: blur(24px);
+    }
+
+    .klarify-lp-x9a2-product-panel:hover {
+      box-shadow: 0 36px 92px rgba(10, 37, 64, 0.22);
+    }
+
+    .klarify-lp-x9a2-product-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid rgba(10, 37, 64, 0.08);
+    }
+
+    .klarify-lp-x9a2-window-controls {
+      display: flex;
+      gap: 7px;
+    }
+
+    .klarify-lp-x9a2-window-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: #ff6b6b;
+    }
+
+    .klarify-lp-x9a2-window-dot:nth-child(2) {
+      background: #ffd166;
+    }
+
+    .klarify-lp-x9a2-window-dot:nth-child(3) {
+      background: #06d6a0;
+    }
+
+    .klarify-lp-x9a2-product-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--klarify-lp-x9a2-color-soft);
+      font-size: 0.78rem;
+      font-weight: 800;
+    }
+
+    .klarify-lp-x9a2-product-status::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--klarify-lp-x9a2-color-green);
+      box-shadow: 0 0 0 4px rgba(0, 184, 148, 0.12);
+    }
+
+    .klarify-lp-x9a2-product-body {
+      display: grid;
+      grid-template-columns: 0.82fr 1.18fr;
+      min-height: 420px;
+    }
+
+    .klarify-lp-x9a2-product-sidebar {
+      padding: 22px;
+      background:
+        linear-gradient(180deg, rgba(246, 249, 252, 0.96), rgba(255, 255, 255, 0.82));
+      border-right: 1px solid rgba(10, 37, 64, 0.08);
+    }
+
+    .klarify-lp-x9a2-product-menu-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 12px;
+      margin-bottom: 8px;
+      border-radius: 12px;
+      color: var(--klarify-lp-x9a2-color-muted);
+      font-size: 0.86rem;
+      font-weight: 750;
+    }
+
+    .klarify-lp-x9a2-product-menu-row:first-child {
+      color: var(--klarify-lp-x9a2-color-blue);
+      background: rgba(99, 91, 255, 0.09);
+    }
+
+    .klarify-lp-x9a2-product-menu-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(99, 91, 255, 0.2), rgba(0, 212, 255, 0.14));
+    }
+
+    .klarify-lp-x9a2-product-main {
+      padding: 24px;
+    }
+
+    .klarify-lp-x9a2-metric-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+
+    .klarify-lp-x9a2-metric-tile {
+      padding: 16px;
+      border: 1px solid rgba(10, 37, 64, 0.08);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: 0 8px 20px rgba(10, 37, 64, 0.05);
+    }
+
+    .klarify-lp-x9a2-metric-label {
+      margin: 0 0 10px;
+      color: var(--klarify-lp-x9a2-color-soft);
+      font-size: 0.76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .klarify-lp-x9a2-metric-value {
+      margin: 0;
+      font-size: 1.6rem;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      font-weight: 850;
+    }
+
+    .klarify-lp-x9a2-chart-box {
+      position: relative;
+      height: 170px;
+      margin-top: 16px;
+      padding: 18px;
+      border: 1px solid rgba(10, 37, 64, 0.08);
+      border-radius: 20px;
+      background:
+        linear-gradient(rgba(99, 91, 255, 0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(99, 91, 255, 0.07) 1px, transparent 1px),
+        rgba(255, 255, 255, 0.78);
+      background-size: 34px 34px;
+      overflow: hidden;
+    }
+
+    .klarify-lp-x9a2-chart-line {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 34px;
+      height: 88px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, transparent, rgba(99, 91, 255, 0.14), transparent);
+      clip-path: polygon(0 70%, 16% 54%, 30% 58%, 46% 28%, 62% 38%, 78% 14%, 100% 22%, 100% 100%, 0 100%);
+    }
+
+    .klarify-lp-x9a2-chart-line::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-top: 4px solid var(--klarify-lp-x9a2-color-blue);
+      border-radius: 60% 40% 0 0;
+      transform: skewY(-7deg) translateY(16px);
+    }
+
+    .klarify-lp-x9a2-activity-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .klarify-lp-x9a2-activity-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 11px 12px;
+      border-radius: 14px;
+      background: rgba(246, 249, 252, 0.82);
+      color: var(--klarify-lp-x9a2-color-muted);
+      font-size: 0.82rem;
+      font-weight: 750;
+    }
+
+    .klarify-lp-x9a2-activity-badge {
+      padding: 4px 8px;
+      border-radius: 999px;
+      color: #007d6b;
+      background: rgba(0, 184, 148, 0.12);
+      font-size: 0.72rem;
+      font-weight: 850;
+    }
+
+    .klarify-lp-x9a2-section-band {
+      padding: 96px 0;
+    }
+
+    .klarify-lp-x9a2-section-head {
+      max-width: 720px;
+      margin-bottom: 44px;
+    }
+
+    .klarify-lp-x9a2-section-kicker {
+      margin: 0 0 12px;
+      color: var(--klarify-lp-x9a2-color-blue);
+      font-size: 0.9rem;
+      font-weight: 850;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .klarify-lp-x9a2-section-heading {
+      margin: 0;
+      font-size: clamp(2.2rem, 4vw, 4rem);
+      line-height: 1.02;
+      letter-spacing: -0.06em;
+      font-weight: 850;
+    }
+
+    .klarify-lp-x9a2-section-copy {
+      margin: 16px 0 0;
+      color: var(--klarify-lp-x9a2-color-muted);
+      font-size: 1.08rem;
+      line-height: 1.7;
+    }
+
+    .klarify-lp-x9a2-feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .klarify-lp-x9a2-feature-tile {
+      position: relative;
+      min-height: 248px;
+      padding: 26px;
+      border: 1px solid rgba(10, 37, 64, 0.08);
+      border-radius: var(--klarify-lp-x9a2-radius-lg);
+      background:
+        radial-gradient(circle at var(--klarify-lp-x9a2-pointer-x, 50%) var(--klarify-lp-x9a2-pointer-y, 0%), rgba(99, 91, 255, 0.12), transparent 36%),
+        rgba(255, 255, 255, 0.76);
+      box-shadow: var(--klarify-lp-x9a2-shadow-sm);
+      transition:
+        transform var(--klarify-lp-x9a2-transition),
+        box-shadow var(--klarify-lp-x9a2-transition),
+        border-color var(--klarify-lp-x9a2-transition);
+      overflow: hidden;
+    }
+
+    .klarify-lp-x9a2-feature-tile:hover {
+      transform: translateY(-6px);
+      border-color: rgba(99, 91, 255, 0.18);
+      box-shadow: var(--klarify-lp-x9a2-shadow-md);
+    }
+
+    .klarify-lp-x9a2-feature-icon {
+      display: inline-grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 22px;
+      border-radius: 16px;
+      color: var(--klarify-lp-x9a2-color-blue);
+      background: linear-gradient(135deg, rgba(99, 91, 255, 0.13), rgba(0, 212, 255, 0.1));
+    }
+
+    .klarify-lp-x9a2-feature-icon svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .klarify-lp-x9a2-feature-name {
+      margin: 0 0 10px;
+      font-size: 1.14rem;
+      letter-spacing: -0.03em;
+      font-weight: 850;
+    }
+
+    .klarify-lp-x9a2-feature-detail {
+      margin: 0;
+      color: var(--klarify-lp-x9a2-color-muted);
+      line-height: 1.68;
+    }
+
+    .klarify-lp-x9a2-pricing-panel {
+      border-radius: 36px;
+      padding: 40px;
+      background:
+        radial-gradient(circle at 14% 0%, rgba(0, 212, 255, 0.18), transparent 34%),
+        radial-gradient(circle at 88% 16%, rgba(99, 91, 255, 0.16), transparent 34%),
+        rgba(255, 255, 255, 0.74);
+      border: 1px solid rgba(255, 255, 255, 0.74);
+      box-shadow: var(--klarify-lp-x9a2-shadow-md);
+    }
+
+    .klarify-lp-x9a2-pricing-topline {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .klarify-lp-x9a2-billing-switch {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px;
+      border: 1px solid rgba(10, 37, 64, 0.1);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.74);
+      box-shadow: 0 8px 22px rgba(10, 37, 64, 0.06);
+    }
+
+    .klarify-lp-x9a2-billing-choice {
+      min-height: 38px;
+      padding: 0 16px;
+      border: 0;
+      border-radius: 999px;
+      color: var(--klarify-lp-x9a2-color-muted);
+      background: transparent;
+      font-size: 0.92rem;
+      font-weight: 800;
+      transition:
+        color var(--klarify-lp-x9a2-transition),
+        background var(--klarify-lp-x9a2-transition),
+        box-shadow var(--klarify-lp-x9a2-transition);
+    }
+
+    .klarify-lp-x9a2-billing-choice[aria-pressed="true"] {
+      color: #ffffff;
+      background: var(--klarify-lp-x9a2-color-ink);
+      box-shadow: 0 8px 18px rgba(10, 37, 64, 0.18);
+    }
+
+    .klarify-lp-x9a2-plan-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .klarify-lp-x9a2-plan-tile {
+      position: relative;
+      padding: 28px;
+      border: 1px solid rgba(10, 37, 64, 0.08);
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: 0 12px 32px rgba(10, 37, 64, 0.07);
+      transition:
+        transform var(--klarify-lp-x9a2-transition),
+        box-shadow var(--klarify-lp-x9a2-transition),
+        border-color var(--klarify-lp-x9a2-transition);
+    }
+
+    .klarify-lp-x9a2-plan-tile:hover {
+      transform: translateY(-6px);
+      border-color: rgba(99, 91, 255, 0.16);
+      box-shadow: var(--klarify-lp-x9a2-shadow-md);
+    }
+
+    .klarify-lp-x9a2-plan-tile--spotlight {
+      color: #ffffff;
+      background:
+        radial-gradient(circle at 20% 0%, rgba(0, 212, 255, 0.24), transparent 38%),
+        linear-gradient(145deg, #0a2540, #172b85 58%, #5d4dff);
+      box-shadow: 0 24px 64px rgba(99, 91, 255, 0.28);
+      transform: translateY(-10px);
+    }
+
+    .klarify-lp-x9a2-plan-tile--spotlight:hover {
+      transform: translateY(-16px);
+    }
+
+    .klarify-lp-x9a2-plan-ribbon {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      color: #081f35;
+      background: #8ff7d5;
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .klarify-lp-x9a2-plan-name {
+      margin: 0 0 8px;
+      font-size: 1.22rem;
+      letter-spacing: -0.035em;
+      font-weight: 850;
+    }
+
+    .klarify-lp-x9a2-plan-summary {
+      min-height: 56px;
+      margin: 0 0 22px;
+      color: var(--klarify-lp-x9a2-color-muted);
+      line-height: 1.65;
+    }
+
+    .klarify-lp-x9a2-plan-tile--spotlight .klarify-lp-x9a2-plan-summary {
+      color: rgba(255, 255, 255, 0.76);
+    }
+
+    .klarify-lp-x9a2-plan-price {
+      display: flex;
+      align-items: baseline;
+      gap: 5px;
+      margin-bottom: 24px;
+    }
+
+    .klarify-lp-x9a2-plan-amount {
+      font-size: 3rem;
+      line-height: 1;
+      letter-spacing: -0.07em;
+      font-weight: 850;
+    }
+
+    .klarify-lp-x9a2-plan-period {
+      color: var(--klarify-lp-x9a2-color-soft);
+      font-weight: 750;
+    }
+
+    .klarify-lp-x9a2-plan-tile--spotlight .klarify-lp-x9a2-plan-period {
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    .klarify-lp-x9a2-plan-list {
+      display: grid;
+      gap: 12px;
+      margin: 24px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .klarify-lp-x9a2-plan-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      color: var(--klarify-lp-x9a2-color-muted);
+      font-weight: 650;
+    }
+
+    .klarify-lp-x9a2-plan-tile--spotlight .klarify-lp-x9a2-plan-list li {
+      color: rgba(255, 255, 255, 0.82);
+    }
+
+    .klarify-lp-x9a2-plan-list svg {
+      flex: 0 0 auto;
+      width: 18px;
+      height: 18px;
+      margin-top: 3px;
+      color: var(--klarify-lp-x9a2-color-green);
+    }
+
+    .klarify-lp-x9a2-plan-tile--spotlight .klarify-lp-x9a2-pill-action {
+      color: var(--klarify-lp-x9a2-color-ink);
+      background: #ffffff;
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
+    }
+
+    .klarify-lp-x9a2-dev-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.85fr) minmax(360px, 1.15fr);
+      gap: 44px;
+      align-items: center;
+    }
+
+    .klarify-lp-x9a2-code-shell {
+      overflow: hidden;
+      border-radius: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: #081826;
+      box-shadow: var(--klarify-lp-x9a2-shadow-lg);
+    }
+
+    .klarify-lp-x9a2-code-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .klarify-lp-x9a2-code-label {
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 0.84rem;
+      font-weight: 800;
+    }
+
+    .klarify-lp-x9a2-code-copy {
+      border: 0;
+      border-radius: 999px;
+      padding: 8px 12px;
+      color: #c7f9ff;
+      background: rgba(0, 212, 255, 0.12);
+      font-size: 0.8rem;
+      font-weight: 850;
+      transition: background var(--klarify-lp-x9a2-transition), transform var(--klarify-lp-x9a2-transition);
+    }
+
+    .klarify-lp-x9a2-code-copy:hover,
+    .klarify-lp-x9a2-code-copy:focus-visible {
+      transform: translateY(-1px);
+      background: rgba(0, 212, 255, 0.18);
+    }
+
+    .klarify-lp-x9a2-code-block {
+      margin: 0;
+      padding: 24px;
+      overflow: auto;
+      color: #d6e7ff;
+      font: 500 0.92rem/1.75 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    .klarify-lp-x9a2-code-token-purple {
+      color: #b69cff;
+    }
+
+    .klarify-lp-x9a2-code-token-blue {
+      color: #73d7ff;
+    }
+
+    .klarify-lp-x9a2-code-token-green {
+      color: #8ff7d5;
+    }
+
+    .klarify-lp-x9a2-code-token-orange {
+      color: #ffd18c;
+    }
+
+    .klarify-lp-x9a2-terminal-box {
+      margin: 18px;
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(0, 0, 0, 0.24);
+      color: rgba(255, 255, 255, 0.76);
+      font: 600 0.86rem/1.7 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .klarify-lp-x9a2-terminal-prompt {
+      color: #8ff7d5;
+    }
+
+    .klarify-lp-x9a2-testimonial-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+
+    .klarify-lp-x9a2-quote-tile {
+      padding: 24px;
+      border: 1px solid rgba(10, 37, 64, 0.08);
+      border-radius: 26px;
+      background: rgba(255, 255, 255, 0.78);
+      box-shadow: var(--klarify-lp-x9a2-shadow-sm);
+    }
+
+    .klarify-lp-x9a2-quote-text {
+      margin: 0;
+      color: #243b53;
+      line-height: 1.7;
+      font-weight: 650;
+    }
+
+    .klarify-lp-x9a2-quote-person {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .klarify-lp-x9a2-avatar-mark {
+      display: grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      color: #ffffff;
+      background: linear-gradient(135deg, var(--klarify-lp-x9a2-color-blue), var(--klarify-lp-x9a2-color-teal));
+      font-weight: 900;
+    }
+
+    .klarify-lp-x9a2-quote-name {
+      margin: 0;
+      font-weight: 850;
+      letter-spacing: -0.02em;
+    }
+
+    .klarify-lp-x9a2-quote-role {
+      margin: 2px 0 0;
+      color: var(--klarify-lp-x9a2-color-soft);
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+
+    .klarify-lp-x9a2-faq-shell {
+      max-width: 860px;
+      margin-inline: auto;
+    }
+
+    .klarify-lp-x9a2-faq-shell .klarify-lp-x9a2-section-head {
+      margin-inline: auto;
+      text-align: center;
+    }
+
+    .klarify-lp-x9a2-faq-list {
+      display: grid;
+      gap: 14px;
+    }
+
+    .klarify-lp-x9a2-faq-item {
+      border: 1px solid rgba(10, 37, 64, 0.08);
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.8);
+      box-shadow: 0 10px 26px rgba(10, 37, 64, 0.05);
+      overflow: hidden;
+    }
+
+    .klarify-lp-x9a2-faq-question {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      gap: 20px;
+      padding: 20px 22px;
+      border: 0;
+      color: var(--klarify-lp-x9a2-color-ink);
+      background: transparent;
+      text-align: left;
+      font-weight: 850;
+      letter-spacing: -0.02em;
+    }
+
+    .klarify-lp-x9a2-faq-question svg {
+      flex: 0 0 auto;
+      width: 20px;
+      height: 20px;
+      color: var(--klarify-lp-x9a2-color-blue);
+      transition: transform var(--klarify-lp-x9a2-transition);
+    }
+
+    .klarify-lp-x9a2-faq-question[aria-expanded="true"] svg {
+      transform: rotate(45deg);
+    }
+
+    .klarify-lp-x9a2-faq-answer {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 300ms ease;
+    }
+
+    .klarify-lp-x9a2-faq-question[aria-expanded="true"] + .klarify-lp-x9a2-faq-answer {
+      grid-template-rows: 1fr;
+    }
+
+    .klarify-lp-x9a2-faq-answer-inner {
+      overflow: hidden;
+    }
+
+    .klarify-lp-x9a2-faq-answer-inner p {
+      margin: 0;
+      padding: 0 22px 22px;
+      color: var(--klarify-lp-x9a2-color-muted);
+      line-height: 1.72;
+    }
+
+    .klarify-lp-x9a2-footer-frame {
+      padding: 56px 0 40px;
+      border-top: 1px solid rgba(10, 37, 64, 0.08);
+      background: rgba(255, 255, 255, 0.62);
+    }
+
+    .klarify-lp-x9a2-footer-grid {
+      display: grid;
+      grid-template-columns: 1.2fr repeat(3, 0.6fr);
+      gap: 32px;
+    }
+
+    .klarify-lp-x9a2-footer-copy {
+      max-width: 340px;
+      margin: 14px 0 0;
+      color: var(--klarify-lp-x9a2-color-muted);
+      line-height: 1.7;
+    }
+
+    .klarify-lp-x9a2-footer-heading {
+      margin: 0 0 14px;
+      font-size: 0.86rem;
+      color: var(--klarify-lp-x9a2-color-ink);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 900;
+    }
+
+    .klarify-lp-x9a2-footer-link-list {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .klarify-lp-x9a2-footer-link {
+      color: var(--klarify-lp-x9a2-color-muted);
+      font-weight: 650;
+      transition: color var(--klarify-lp-x9a2-transition);
+    }
+
+    .klarify-lp-x9a2-footer-link:hover,
+    .klarify-lp-x9a2-footer-link:focus-visible {
+      color: var(--klarify-lp-x9a2-color-blue);
+    }
+
+    .klarify-lp-x9a2-footer-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-top: 42px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(10, 37, 64, 0.08);
+      color: var(--klarify-lp-x9a2-color-soft);
+      font-size: 0.92rem;
+      font-weight: 650;
+    }
+
+    .klarify-lp-x9a2-social-row {
+      display: flex;
+      gap: 10px;
+    }
+
+    .klarify-lp-x9a2-social-link {
+      display: grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      border: 1px solid rgba(10, 37, 64, 0.1);
+      border-radius: 999px;
+      color: var(--klarify-lp-x9a2-color-muted);
+      background: rgba(255, 255, 255, 0.72);
+      transition:
+        color var(--klarify-lp-x9a2-transition),
+        transform var(--klarify-lp-x9a2-transition),
+        border-color var(--klarify-lp-x9a2-transition);
+    }
+
+    .klarify-lp-x9a2-social-link:hover,
+    .klarify-lp-x9a2-social-link:focus-visible {
+      color: var(--klarify-lp-x9a2-color-blue);
+      transform: translateY(-2px);
+      border-color: rgba(99, 91, 255, 0.24);
+    }
+
+    .klarify-lp-x9a2-social-link svg {
+      width: 18px;
+      height: 18px;
+    }
+
+    @media (max-width: 980px) {
+      .klarify-lp-x9a2-nav-links,
+      .klarify-lp-x9a2-nav-inner > .klarify-lp-x9a2-pill-action {
+        display: none;
+      }
+
+      .klarify-lp-x9a2-mobile-trigger {
+        display: grid;
+      }
+
+      .klarify-lp-x9a2-nav-frame[data-klarify-lp-x9a2-menu="open"] .klarify-lp-x9a2-nav-links {
+        position: absolute;
+        top: 72px;
+        left: 20px;
+        right: 20px;
+        display: grid;
+        gap: 4px;
+        padding: 18px;
+        border: 1px solid rgba(10, 37, 64, 0.08);
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.94);
+        box-shadow: var(--klarify-lp-x9a2-shadow-md);
+      }
+
+      .klarify-lp-x9a2-hero-grid,
+      .klarify-lp-x9a2-dev-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .klarify-lp-x9a2-ui-stage {
+        max-width: 640px;
+        margin-inline: auto;
+      }
+
+      .klarify-lp-x9a2-feature-grid,
+      .klarify-lp-x9a2-plan-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .klarify-lp-x9a2-plan-tile--spotlight {
+        transform: none;
+      }
+
+      .klarify-lp-x9a2-testimonial-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .klarify-lp-x9a2-footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 680px) {
+      .klarify-lp-x9a2-width-rail {
+        width: min(100% - 28px, var(--klarify-lp-x9a2-max-width));
+      }
+
+      .klarify-lp-x9a2-hero-grid {
+        padding: 72px 0 56px;
+      }
+
+      .klarify-lp-x9a2-section-band {
+        padding: 72px 0;
+      }
+
+      .klarify-lp-x9a2-hero-actions,
+      .klarify-lp-x9a2-pricing-topline,
+      .klarify-lp-x9a2-footer-bottom {
+        align-items: stretch;
+        flex-direction: column;
+      }
+
+      .klarify-lp-x9a2-pill-action,
+      .klarify-lp-x9a2-ghost-action {
+        width: 100%;
+      }
+
+      .klarify-lp-x9a2-product-body {
+        grid-template-columns: 1fr;
+      }
+
+      .klarify-lp-x9a2-product-sidebar {
+        display: none;
+      }
+
+      .klarify-lp-x9a2-feature-grid,
+      .klarify-lp-x9a2-plan-grid,
+      .klarify-lp-x9a2-testimonial-grid,
+      .klarify-lp-x9a2-footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .klarify-lp-x9a2-pricing-panel {
+        padding: 22px;
+        border-radius: 28px;
+      }
+
+      .klarify-lp-x9a2-billing-switch {
+        width: 100%;
+      }
+
+      .klarify-lp-x9a2-billing-choice {
+        flex: 1;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 1ms !important;
+        animation-duration: 1ms !important;
+      }
+    }
+  </style>
+</head>
+<body><div class="klarify-lp-x9a2-page-shell"><header class="klarify-lp-x9a2-nav-frame" data-klarify-lp-x9a2-menu="closed">
+      <nav class="klarify-lp-x9a2-width-rail klarify-lp-x9a2-nav-inner" aria-label="Primary navigation">
+        <a class="klarify-lp-x9a2-brand-mark" href="#klarify-lp-x9a2-top" aria-label="Klarify home">
+          <span class="klarify-lp-x9a2-brand-spark" aria-hidden="true"></span>
+          Klarify
+        </a>
+
+        <div class="klarify-lp-x9a2-nav-links">
+          <a class="klarify-lp-x9a2-nav-anchor" href="#klarify-lp-x9a2-product">Product</a>
+          <a class="klarify-lp-x9a2-nav-anchor" href="#klarify-lp-x9a2-pricing">Pricing</a>
+          <a class="klarify-lp-x9a2-nav-anchor" href="#klarify-lp-x9a2-docs">Docs</a>
+          <a class="klarify-lp-x9a2-nav-anchor" href="#klarify-lp-x9a2-security">Security</a>
+        </div>
+
+        <a class="klarify-lp-x9a2-pill-action" href="#klarify-lp-x9a2-pricing">
+          Start free trial
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"></path>
+          </svg>
+        </a>
+
+        <button class="klarify-lp-x9a2-mobile-trigger" type="button" aria-label="Open navigation" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M5 7h14M5 12h14M5 17h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"></path>
+          </svg>
+        </button>
+      </nav>
+    </header><main></main><footer class="klarify-lp-x9a2-footer-frame">
+      <div class="klarify-lp-x9a2-width-rail">
+        <div class="klarify-lp-x9a2-footer-grid">
+          <div>
+            <a class="klarify-lp-x9a2-brand-mark" href="#klarify-lp-x9a2-top">
+              <span class="klarify-lp-x9a2-brand-spark" aria-hidden="true"></span>
+              Klarify
+            </a>
+            <p class="klarify-lp-x9a2-footer-copy">The API-first platform for clear, secure, and reliable operational workflows.</p>
+          </div>
+
+          <div>
+            <h2 class="klarify-lp-x9a2-footer-heading">Product</h2>
+            <ul class="klarify-lp-x9a2-footer-link-list">
+              <li><a class="klarify-lp-x9a2-footer-link" href="#klarify-lp-x9a2-product">Features</a></li>
+              <li><a class="klarify-lp-x9a2-footer-link" href="#klarify-lp-x9a2-pricing">Pricing</a></li>
+              <li><a class="klarify-lp-x9a2-footer-link" href="#klarify-lp-x9a2-security">Security</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h2 class="klarify-lp-x9a2-footer-heading">Developers</h2>
+            <ul class="klarify-lp-x9a2-footer-link-list">
+              <li><a class="klarify-lp-x9a2-footer-link" href="#klarify-lp-x9a2-docs">Docs</a></li>
+              <li><a class="klarify-lp-x9a2-footer-link" href="#klarify-lp-x9a2-docs">API status</a></li>
+              <li><a class="klarify-lp-x9a2-footer-link" href="#klarify-lp-x9a2-faq">Guides</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h2 class="klarify-lp-x9a2-footer-heading">Company</h2>
+            <ul class="klarify-lp-x9a2-footer-link-list">
+              <li><a class="klarify-lp-x9a2-footer-link" href="#klarify-lp-x9a2-top">About</a></li>
+              <li><a class="klarify-lp-x9a2-footer-link" href="#klarify-lp-x9a2-faq">Contact</a></li>
+              <li><a class="klarify-lp-x9a2-footer-link" href="#klarify-lp-x9a2-top">Privacy</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="klarify-lp-x9a2-footer-bottom">
+          <span>© 2025 Klarify, Inc. All rights reserved.</span>
+          <div class="klarify-lp-x9a2-social-row" aria-label="Social links">
+            <a class="klarify-lp-x9a2-social-link" href="#" aria-label="Klarify on X">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 4l11.4 16H20L8.6 4H4Zm1.8 1.2H8l10.2 13.6H16L5.8 5.2ZM4 20l6.9-7.2m2.2-2.3L19 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path></svg>
+            </a>
+            <a class="klarify-lp-x9a2-social-link" href="#" aria-label="Klarify on GitHub">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2.8a9.2 9.2 0 0 0-2.9 17.9c.46.08.63-.2.63-.44v-1.6c-2.55.55-3.09-1.1-3.09-1.1-.42-1.07-1.03-1.35-1.03-1.35-.84-.57.06-.56.06-.56.93.07 1.42.96 1.42.96.83 1.41 2.17 1 2.7.77.08-.6.32-1 .58-1.23-2.03-.23-4.17-1.02-4.17-4.53 0-1 .36-1.82.95-2.46-.1-.23-.41-1.16.09-2.42 0 0 .78-.25 2.54.94A8.75 8.75 0 0 1 12 7.37c.78 0 1.56.1 2.29.31 1.76-1.19 2.53-.94 2.53-.94.51 1.26.2 2.19.1 2.42.59.64.94 1.46.94 2.46 0 3.52-2.14 4.3-4.18 4.52.33.29.62.85.62 1.71v2.41c0 .24.17.53.64.44A9.2 9.2 0 0 0 12 2.8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"></path></svg>
+            </a>
+            <a class="klarify-lp-x9a2-social-link" href="#" aria-label="Klarify on LinkedIn">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6.8 9.5V19M6.8 6.4v.1M11 19v-5.4c0-2.7 5.8-3.5 5.8 0V19M4.5 3.8h15a.7.7 0 0 1 .7.7v15a.7.7 0 0 1-.7.7h-15a.7.7 0 0 1-.7-.7v-15a.7.7 0 0 1 .7-.7Z" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </footer></div><script>
+    (() => {
+      const klarifyLpX9a2NavFrame = document.querySelector(".klarify-lp-x9a2-nav-frame");
+      const klarifyLpX9a2MobileTrigger = document.querySelector(".klarify-lp-x9a2-mobile-trigger");
+      const klarifyLpX9a2NavAnchors = document.querySelectorAll('a[href^="#"]');
+
+      klarifyLpX9a2MobileTrigger?.addEventListener("click", () => {
+        const klarifyLpX9a2IsOpen = klarifyLpX9a2NavFrame?.getAttribute("data-klarify-lp-x9a2-menu") === "open";
+        klarifyLpX9a2NavFrame?.setAttribute("data-klarify-lp-x9a2-menu", klarifyLpX9a2IsOpen ? "closed" : "open");
+        klarifyLpX9a2MobileTrigger.setAttribute("aria-expanded", String(!klarifyLpX9a2IsOpen));
+        klarifyLpX9a2MobileTrigger.setAttribute("aria-label", klarifyLpX9a2IsOpen ? "Open navigation" : "Close navigation");
+      });
+
+      klarifyLpX9a2NavAnchors.forEach((klarifyLpX9a2Anchor) => {
+        klarifyLpX9a2Anchor.addEventListener("click", (klarifyLpX9a2Event) => {
+          const klarifyLpX9a2TargetId = klarifyLpX9a2Anchor.getAttribute("href");
+          if (!klarifyLpX9a2TargetId || klarifyLpX9a2TargetId === "#") return;
+
+          const klarifyLpX9a2Target = document.querySelector(klarifyLpX9a2TargetId);
+          if (!klarifyLpX9a2Target) return;
+
+          klarifyLpX9a2Event.preventDefault();
+          klarifyLpX9a2Target.scrollIntoView({ behavior: "smooth", block: "start" });
+
+          klarifyLpX9a2NavFrame?.setAttribute("data-klarify-lp-x9a2-menu", "closed");
+          klarifyLpX9a2MobileTrigger?.setAttribute("aria-expanded", "false");
+          klarifyLpX9a2MobileTrigger?.setAttribute("aria-label", "Open navigation");
+        });
+      });
+
+      const klarifyLpX9a2BillingButtons = document.querySelectorAll("[data-klarify-lp-x9a2-billing]");
+      const klarifyLpX9a2PriceAmounts = document.querySelectorAll("[data-klarify-lp-x9a2-monthly]");
+      const klarifyLpX9a2PricePeriods = document.querySelectorAll(".klarify-lp-x9a2-plan-period");
+
+      klarifyLpX9a2BillingButtons.forEach((klarifyLpX9a2Button) => {
+        klarifyLpX9a2Button.addEventListener("click", () => {
+          const klarifyLpX9a2Mode = klarifyLpX9a2Button.getAttribute("data-klarify-lp-x9a2-billing");
+
+          klarifyLpX9a2BillingButtons.forEach((klarifyLpX9a2OtherButton) => {
+            klarifyLpX9a2OtherButton.setAttribute("aria-pressed", String(klarifyLpX9a2OtherButton === klarifyLpX9a2Button));
+          });
+
+          klarifyLpX9a2PriceAmounts.forEach((klarifyLpX9a2Amount) => {
+            const klarifyLpX9a2NextValue = klarifyLpX9a2Amount.getAttribute(`data-klarify-lp-x9a2-${klarifyLpX9a2Mode}`);
+            if (klarifyLpX9a2NextValue) klarifyLpX9a2Amount.textContent = klarifyLpX9a2NextValue;
+          });
+
+          klarifyLpX9a2PricePeriods.forEach((klarifyLpX9a2Period) => {
+            klarifyLpX9a2Period.textContent = klarifyLpX9a2Mode === "yearly" ? "/mo, billed yearly" : "/mo";
+          });
+        });
+      });
+
+      const klarifyLpX9a2FaqButtons = document.querySelectorAll(".klarify-lp-x9a2-faq-question");
+
+      klarifyLpX9a2FaqButtons.forEach((klarifyLpX9a2Question) => {
+        klarifyLpX9a2Question.addEventListener("click", () => {
+          const klarifyLpX9a2WasExpanded = klarifyLpX9a2Question.getAttribute("aria-expanded") === "true";
+
+          klarifyLpX9a2FaqButtons.forEach((klarifyLpX9a2OtherQuestion) => {
+            klarifyLpX9a2OtherQuestion.setAttribute("aria-expanded", "false");
+          });
+
+          klarifyLpX9a2Question.setAttribute("aria-expanded", String(!klarifyLpX9a2WasExpanded));
+        });
+      });
+
+      const klarifyLpX9a2TiltPanel = document.querySelector("[data-klarify-lp-x9a2-tilt]");
+
+      klarifyLpX9a2TiltPanel?.addEventListener("pointermove", (klarifyLpX9a2Event) => {
+        const klarifyLpX9a2Rect = klarifyLpX9a2TiltPanel.getBoundingClientRect();
+        const klarifyLpX9a2X = (klarifyLpX9a2Event.clientX - klarifyLpX9a2Rect.left) / klarifyLpX9a2Rect.width - 0.5;
+        const klarifyLpX9a2Y = (klarifyLpX9a2Event.clientY - klarifyLpX9a2Rect.top) / klarifyLpX9a2Rect.height - 0.5;
+
+        klarifyLpX9a2TiltPanel.style.setProperty("--klarify-lp-x9a2-tilt-y", `${klarifyLpX9a2X * 7}deg`);
+        klarifyLpX9a2TiltPanel.style.setProperty("--klarify-lp-x9a2-tilt-x", `${klarifyLpX9a2Y * -7}deg`);
+      });
+
+      klarifyLpX9a2TiltPanel?.addEventListener("pointerleave", () => {
+        klarifyLpX9a2TiltPanel.style.setProperty("--klarify-lp-x9a2-tilt-y", "0deg");
+        klarifyLpX9a2TiltPanel.style.setProperty("--klarify-lp-x9a2-tilt-x", "0deg");
+      });
+
+      const klarifyLpX9a2InteractiveTiles = document.querySelectorAll(".klarify-lp-x9a2-feature-tile");
+
+      klarifyLpX9a2InteractiveTiles.forEach((klarifyLpX9a2Tile) => {
+        klarifyLpX9a2Tile.addEventListener("pointermove", (klarifyLpX9a2Event) => {
+          const klarifyLpX9a2Rect = klarifyLpX9a2Tile.getBoundingClientRect();
+          const klarifyLpX9a2PointerX = ((klarifyLpX9a2Event.clientX - klarifyLpX9a2Rect.left) / klarifyLpX9a2Rect.width) * 100;
+          const klarifyLpX9a2PointerY = ((klarifyLpX9a2Event.clientY - klarifyLpX9a2Rect.top) / klarifyLpX9a2Rect.height) * 100;
+
+          klarifyLpX9a2Tile.style.setProperty("--klarify-lp-x9a2-pointer-x", `${klarifyLpX9a2PointerX}%`);
+          klarifyLpX9a2Tile.style.setProperty("--klarify-lp-x9a2-pointer-y", `${klarifyLpX9a2PointerY}%`);
+        });
+      });
+
+      const klarifyLpX9a2CopyButton = document.querySelector("[data-klarify-lp-x9a2-copy]");
+      const klarifyLpX9a2CodeSample = document.querySelector("#klarify-lp-x9a2-code-sample");
+
+      klarifyLpX9a2CopyButton?.addEventListener("click", async () => {
+        const klarifyLpX9a2Text = klarifyLpX9a2CodeSample?.textContent?.trim() || "";
+        try {
+          await navigator.clipboard.writeText(klarifyLpX9a2Text);
+          klarifyLpX9a2CopyButton.textContent = "Copied";
+          window.setTimeout(() => {
+            klarifyLpX9a2CopyButton.textContent = "Copy";
+          }, 1600);
+        } catch {
+          klarifyLpX9a2CopyButton.textContent = "Select code";
+          window.setTimeout(() => {
+            klarifyLpX9a2CopyButton.textContent = "Copy";
+          }, 1600);
+        }
+      });
+    })();
+  </script></body></html>
